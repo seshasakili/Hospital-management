@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Hospital Management Dashboard</h1>
+        <nav>
+            <button onclick="showSection('patients')" class="active-btn">Patients</button>
+            <button onclick="showSection('doctors')">Doctors</button>
+            <button onclick="showSection('appointments')">Appointments</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Patients Section -->
+        <section id="patients" class="active-section card">
+            <h2>Patient Registration</h2>
+            <form id="patientForm">
+                <input type="text" id="patientName" placeholder="Patient Name" required>
+                <input type="number" id="patientAge" placeholder="Age" required>
+                <input type="text" id="patientDisease" placeholder="Disease" required>
+                <button type="submit">Add Patient</button>
+            </form>
+
+            <input type="text" id="patientSearch" placeholder="Search Patient..." onkeyup="filterTable('patientTable','patientSearch')">
+
+            <table id="patientTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Disease</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Doctors Section -->
+        <section id="doctors" class="card">
+            <h2>Doctor Management</h2>
+            <form id="doctorForm">
+                <input type="text" id="doctorName" placeholder="Doctor Name" required>
+                <input type="text" id="doctorSpecialty" placeholder="Specialty" required>
+                <button type="submit">Add Doctor</button>
+            </form>
+
+            <input type="text" id="doctorSearch" placeholder="Search Doctor..." onkeyup="filterTable('doctorTable','doctorSearch')">
+
+            <table id="doctorTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Specialty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Appointments Section -->
+        <section id="appointments" class="card">
+            <h2>Appointment Scheduling</h2>
+            <form id="appointmentForm">
+                <input type="text" id="appointmentPatient" placeholder="Patient Name" required>
+                <input type="text" id="appointmentDoctor" placeholder="Doctor Name" required>
+                <input type="date" id="appointmentDate" required>
+                <button type="submit">Schedule Appointment</button>
+            </form>
+
+            <input type="text" id="appointmentSearch" placeholder="Search Appointment..." onkeyup="filterTable('appointmentTable','appointmentSearch')">
+
+            <table id="appointmentTable">
+                <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Doctor</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        // Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('main section').forEach(sec => sec.classList.remove('active-section'));
+            document.getElementById(sectionId).classList.add('active-section');
+
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active-btn'));
+            event.target.classList.add('active-btn');
+        }
+
+        // Filter Function
+        function filterTable(tableId, searchId) {
+            const input = document.getElementById(searchId).value.toLowerCase();
+            const rows = document.getElementById(tableId).getElementsByTagName('tbody')[0].rows;
+            for (let i = 0; i < rows.length; i++) {
+                let rowText = rows[i].innerText.toLowerCase();
+                rows[i].style.display = rowText.includes(input) ? '' : 'none';
+            }
+        }
+
+        // Patient Management
+        const patientForm = document.getElementById('patientForm');
+        const patientTable = document.getElementById('patientTable').getElementsByTagName('tbody')[0];
+        patientForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('patientName').value;
+            const age = document.getElementById('patientAge').value;
+            const disease = document.getElementById('patientDisease').value;
+            const row = patientTable.insertRow();
+            row.insertCell(0).innerText = name;
+            row.insertCell(1).innerText = age;
+            row.insertCell(2).innerText = disease;
+            patientForm.reset();
+        });
+
+        // Doctor Management
+        const doctorForm = document.getElementById('doctorForm');
+        const doctorTable = document.getElementById('doctorTable').getElementsByTagName('tbody')[0];
+        doctorForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('doctorName').value;
+            const specialty = document.getElementById('doctorSpecialty').value;
+            const row = doctorTable.insertRow();
+            row.insertCell(0).innerText = name;
+            row.insertCell(1).innerText = specialty;
+            doctorForm.reset();
+        });
+
+        // Appointment Management
+        const appointmentForm = document.getElementById('appointmentForm');
+        const appointmentTable = document.getElementById('appointmentTable').getElementsByTagName('tbody')[0];
+        appointmentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const patient = document.getElementById('appointmentPatient').value;
+            const doctor = document.getElementById('appointmentDoctor').value;
+            const date = document.getElementById('appointmentDate').value;
+            const row = appointmentTable.insertRow();
+            row.insertCell(0).innerText = patient;
+            row.insertCell(1).innerText = doctor;
+            row.insertCell(2).innerText = date;
+            appointmentForm.reset();
+        });
+    </script>
+</body>
+</html>
